@@ -95,6 +95,17 @@ void SimpleEQAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlo
 {
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
+    
+    juce::dsp::ProcessSpec spec;
+    
+    spec.maximumBlockSize = samplesPerBlock;
+    
+    spec.numChannels = 1;
+    
+    spec.sampleRate = sampleRate;
+    
+    leftChain.prepare(spec);
+    rightChain.prepare(spec);
 }
 
 void SimpleEQAudioProcessor::releaseResources()
@@ -200,7 +211,7 @@ SimpleEQAudioProcessor::createParameterLayout()
     layout.add(std::make_unique<juce::AudioParameterFloat>(
         juce::ParameterID { "Peak Freq", 1 }, "Peak Freq",
         juce::NormalisableRange<float>(20.f, 20000.f, 1.f, 1.f), 750.f));
-
+  
     layout.add(std::make_unique<juce::AudioParameterFloat>(
         juce::ParameterID { "Peak Gain", 1 }, "Peak Gain",
         juce::NormalisableRange<float>(-24.f, 24.f, 0.5f, 1.f), 0.0f));
